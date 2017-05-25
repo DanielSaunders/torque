@@ -179,6 +179,7 @@ extern unsigned long    max_memory;
 extern unsigned long    max_swap;
 extern bool             get_cray_taskstats;
 extern u_long           pbsclient;
+extern int              stuck_job_timeout;
 
 struct specials
   {

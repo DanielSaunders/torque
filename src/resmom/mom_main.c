@@ -878,6 +878,36 @@ void check_log(void)
   }  /* END check_log() */
 
 
+/*
+** Check to see if any jobs have been stuck in a 'NEW' state too long. In the
+** case that a job has been, clear that job automatically, if the
+** stuck_job_timeout parameter has been set.
+ */
+
+void check_stuck_job(
+
+  mom_job *pjob)
+
+  {
+  std::string log_msg;
+
+  if (stuck_job_timeout == 0)
+    {
+    return;
+    }
+
+  if ((time_now - pjob->get_long_attr(JOB_ATR_start_time)) > stuck_job_timeout)
+    {
+    log_msg = "Stopping job " + pjob->get_str_attr(JOB_ATR_job_id) + " that has been 'NEW' too long";
+
+    log_record(PBSEVENT_SYSTEM, 0, __func__, log_msg);
+
+    mom_job_purge(pjob);
+    }
+
+  }
+
+
 
 /*
 ** Get an rm_attribute structure from a string.  If a NULL is passed
@@ -6307,6 +6337,16 @@ void check_job_substates(
 
   if (exiting_tasks)
     should_scan_for_exiting = true;
+
+  if ((pjob = (mom_job *)GET_NEXT(svr_newjobs)) != NULL)
+    {
+    while (pjob != NULL)
+      {
+      check_stuck_job(pjob);
+
+      pjob = (mom_job *)GET_NEXT(pjob->ji_alljobs);
+      }
+    }
 
   for (iter = alljobs_list.begin(); iter != alljobs_list.end(); iter++)
     {

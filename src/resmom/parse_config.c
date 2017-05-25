@@ -201,6 +201,7 @@ unsigned long    max_memory = 0;
 unsigned long    max_swap = 0;
 bool             get_cray_taskstats = false;
 u_long           pbsclient;
+int              stuck_job_timeout = 0;
 
 
 
@@ -316,6 +317,7 @@ unsigned long set_max_swap_memory(const char *);
 unsigned long set_get_cray_taskstats(const char *);
 unsigned long set_node_check_on_job_start(const char *);
 unsigned long set_node_check_on_job_end(const char *);
+unsigned long set_stuck_job_timeout(const char *);
 
 struct specials special[] = {
   { "force_overwrite",     setforceoverwrite}, 
@@ -406,6 +408,7 @@ struct specials special[] = {
   { "get_cray_taskstats",   set_get_cray_taskstats},
   { "node_check_on_job_start", set_node_check_on_job_start },
   { "node_check_on_job_end", set_node_check_on_job_end },
+  { "stuck_job_timeout",    set_stuck_job_timeout},
   { NULL,                  NULL }
   };
 
@@ -597,6 +600,28 @@ unsigned long set_get_cray_taskstats(
     
   return(0); /* error */
   }
+
+
+
+unsigned long set_stuck_job_timeout(
+
+  const char *value)
+
+  {
+  int i;
+
+  i = (int)atoi(value);
+
+  if (i < 0)
+    {
+    return(0);  /* error */
+    }
+
+  stuck_job_timeout = (unsigned int)i;
+
+  return(1);
+  }
+
 
 
 unsigned long setidealload(
