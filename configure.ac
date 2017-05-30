@@ -1193,8 +1193,7 @@ AC_ARG_ENABLE(nvidia-gpus,
     [  --enable-nvidia-gpus    enable Nvidia gpu support
                           Nvidia gpu support requires the use of the Nvidia Management Library (NVML)
                           When using --enable-nvidia-gpus, you must also specify --with-nvml-lib=DIR and
-                          --with-nvml-include=DIR. hwloc 1.9 or later is also required.
-                          See --with-hwloc-path.
+                          --with-nvml-include=DIR.
 ],
     enable_nvidia=$enableval,enable_nvidia=no)
 AC_MSG_RESULT($enable_nvidia)
