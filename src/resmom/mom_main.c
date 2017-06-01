@@ -192,6 +192,7 @@ char        *path_undeliv;
 char        *path_aux;
 char        *path_home = (char *)PBS_SERVER_HOME;
 char        *mom_home;
+char        mom_ipaddr[INET_ADDRSTRLEN];
 
 bool         use_path_home = false;
 
@@ -1645,7 +1646,8 @@ void add_diag_header(
 
   {
   output << "\nHost: " << mom_short_name << "/" << mom_host << "   Version: ";
-  output << PACKAGE_VERSION << "   PID: " << getpid() << "\n";
+  output << PACKAGE_VERSION << "   IP address: " << mom_ipaddr;
+  output << "   PID: " << getpid() << "\n";
   } /* END add_diag_header() */
 
 
@@ -4844,6 +4846,10 @@ int setup_program_environment(void)
   char         *ptr;            /* local tmp variable */
   int           network_retries = 0;
 
+  struct addrinfo *pAddr = NULL;
+  int network_family;
+  struct in_addr network_addr;
+
   /* must be started with real and effective uid of 0 */
   if (IamRoot() == 0)
     {
@@ -5020,6 +5026,15 @@ int setup_program_environment(void)
     hostname_specified = 1;
     if (hostc == 0)
       hostc = 1;
+    }
+
+  // Get external IP address of local node
+  if (getaddrinfo(mom_host, NULL, NULL, &pAddr) == 0)
+    {
+    network_family = pAddr->ai_family;
+    network_addr = ((struct sockaddr_in *)pAddr->ai_addr)->sin_addr;
+
+    inet_ntop(network_family, &network_addr, mom_ipaddr, INET_ADDRSTRLEN);
     }
 
   if (!multi_mom)
