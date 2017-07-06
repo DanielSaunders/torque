@@ -104,6 +104,7 @@
 #include "../lib/Liblog/pbs_log.h"
 #include "utils.h"
 #include "pbs_ifl.h"
+#include "banned_users.h"
 
 pthread_mutex_t ruserok_mutex;
 
@@ -111,7 +112,7 @@ pthread_mutex_t ruserok_mutex;
 
 extern char *msg_orighost;
 extern char  server_host[];
-
+extern banned_users banned_usrs;
 
 
 int initialize_ruserok_mutex()
@@ -370,6 +371,16 @@ bool is_user_allowed_to_submit_jobs(
     return(false);
     }
 
+  if (banned_usrs.is_banned_user(orighost, user))
+    {
+    if (EMsg != NULL)
+      {
+      snprintf(EMsg, 1024, "user %s from %s is banned for making too many requests",
+        user.c_str(), orighost);
+      }
+    return(false);
+    }
+
   short_host = orighost;
   size_t pos = short_host.find('.');
   if (pos == std::string::npos)
@@ -493,6 +504,7 @@ bool is_user_allowed_to_submit_jobs(
                We set rc to 0 to be consistent with the original ruserok functionality */
     }
 #else
+
 
   /* ruserok is the last chance the incoming submission can work. 
      check to see if the user hosts combination is allowed */

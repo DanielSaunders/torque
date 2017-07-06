@@ -13,7 +13,7 @@ noinst_HEADERS = queue_recov.h req_manager.h req_select.h svr_connect.h \
                  issue_request.h pbsd_init.h req_holdarray.h req_register.h resc_def_all.h svr_process_request.h \
                  ji_mutex.h pbsd_main.h req_holdjob.h req_rerun.h run_sched.h svr_recov.h job_func.h process_request.h \
                  req_jobobit.h req_rescq.h stat_job.h svr_resccost.h job_qs_upgrade.h queue_func.h req_locate.h \
-                 req_runjob.h svr_chk_owner.h xml_recov.h
+                 req_runjob.h svr_chk_owner.h xml_recov.h banned_users.h
 
 
 PBS_LIBS = ../lib/Libattr/libattr.a \
@@ -47,7 +47,7 @@ pbs_server_SOURCES = accounting.c array_func.c array_upgrade.c attr_recov.c dis_
 										 delete_all_tracker.cpp id_map.cpp node_power_state.c req_modify_node.c \
 										 mom_hierarchy_handler.cpp completed_jobs_map.cpp pbsnode.cpp \
 										 restricted_host.cpp acl_special.cpp svr_job.cpp mail_throttler.cpp job_array.cpp \
-										 xml_recov.cpp
+										 xml_recov.cpp banned_users.cpp
 
 install-exec-hook:
 	$(PBS_MKDIRS) aux || :

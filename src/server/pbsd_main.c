@@ -147,6 +147,7 @@
 #include "node_func.h"
 #include "mom_hierarchy_handler.h"
 #include "completed_jobs_map.h"
+#include "banned_users.h"
 
 
 #define TASK_CHECK_INTERVAL      10
@@ -258,6 +259,7 @@ pbs_net_t               pbs_scheduler_addr;
 unsigned int            pbs_scheduler_port;
 extern pbs_net_t        pbs_server_addr;
 unsigned int            pbs_server_port_dis;
+banned_users            banned_usrs;
 
 bool                    use_path_home = false;  // set to true if pbs_server is started with a -d option
 bool                    auto_send_hierarchy = true; //If false this directs pbs_server to not send the hierarchy to all the MOMs on startup.
